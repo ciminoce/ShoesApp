@@ -1,0 +1,76 @@
+﻿@model ShoeAssignColoursVm
+
+@{
+    ViewData["Title"] = "Assign Colors to Shoe";
+}
+
+<h2>Assign Colors to Shoe</h2>
+
+<!-- Mostrar información del zapato -->
+<div>
+    <h3>@Model.Model</h3>
+    <p>Base Price: $@Model.BasePrice</p>
+</div>
+
+<!-- Formulario para asignar colores y sus precios -->
+<form asp-action="AssignColors" method="post">
+    <input type="hidden" asp-for="ShoeId" />
+    <input type="hidden" asp-for="@Model.Model" />
+
+    <!-- Sección para agregar un nuevo color -->
+    <div class="form-group row mb-3">
+        <div class="col-4">
+            <label for="NewColourId">Add New Colour</label>
+            <select class="form-control" asp-for="NewColourId" asp-items="Model.AllColours">
+                <option value="">Select a colour</option>
+            </select>
+
+        </div>
+        <div class="col-4">
+            <!-- Input para el precio del nuevo color -->
+            <div class="form-group">
+                <label for="NewColourPrice">New Colour Price:</label>
+                <input class="form-control" type="number" step="0.01" asp-for="NewColourPrice" />
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="form-group m-3">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-success" asp-action="Index">Back to List</a>
+
+    </div>
+    <!-- Mostrar colores ya asignados con inputs para sus precios -->
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Color</th>
+                <th>Price</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.AvailableColours.Any())
+            {
+                foreach (var color in Model.AvailableColours)
+                {
+                    <tr>
+                        <td>@color.ColourName</td>
+                        <td>@color.Price.ToString("C2")</td>
+                    </tr>
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td style="text-align:center" class="text-danger fw-bold" colspan="2">No colors have been added yet</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</form>

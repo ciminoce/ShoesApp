@@ -1,0 +1,106 @@
+﻿@model IPagedList<ShoeListVm>
+@using X.PagedList
+@using X.Web.PagedList
+@{
+    ViewData["Title"] = "Shoe List";
+}
+<div class="container">
+    @Html.AntiForgeryToken()
+    <div class="row mb-3">
+        <div class="col-6">
+            <h3>Shoe List</h3>
+
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Shoes" asp-action="UpSert" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                Nuevo
+            </a>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th style="width:20%">Model</th>
+                <th style="width:15%">Brand</th>
+                <th style="width:10%">Sport</th>
+                <th style="width:10%">Genre</th>
+                <th style="width:10%">Price</th>
+                <th style="width:10%">Active</th>
+                <th style="width:25%">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr id="@item.ShoeId">
+                        <td>
+                            @item.Model
+
+                        </td>
+                        <td>
+                            @item.Brand
+
+                        </td>
+                        <td>
+                            @item.Sport
+
+                        </td>
+                        <td>
+                            @item.Genre
+
+                        </td>
+                        <td style="text-align:right">
+                            @item.Price.ToString("N2")
+
+                        </td>
+
+                        <td>
+                            @if (item.Active)
+                            {
+                                <span class="badge bg-primary">Yes</span>
+                            }else
+                            {
+                                <span class="badge bg-danger">No </span>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-warning" asp-controller="Shoes" asp-action="UpSert" asp-route-id="@item.ShoeId">
+                                <i class="bi bi-pencil-square"></i>&nbsp;
+                                Edit
+                            </a>
+                            <a onclick="Delete('/Shoes/Delete/@item.ShoeId',@item.ShoeId,'@item.Model')" class="btn btn-danger">
+                                <i class="bi bi-trash-fill"></i>
+                                Delete
+                            </a>
+                            <a class="btn btn-info" asp-controller="Shoes" asp-action="AssignColors" asp-route-id="@item.ShoeId">
+                                <i class="bi bi-card-checklist"></i>
+                                Colors
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center">
+                        F?uck!!! No shoes have been added yet!
+
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <partial name="_Pager" model="@Model" />
+
+</div>
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="~/js/common.js"></script>
+
+}
